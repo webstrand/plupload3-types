@@ -59,6 +59,6 @@ interface Mime {
 }
 const Mime: Mime;
 namespace Mime {
-	type MimeType = { title: string, extensions: string };
+	type MimeType = { title: string; extensions: string };
 }
 }}}
