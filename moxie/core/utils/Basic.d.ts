@@ -68,9 +68,9 @@ interface Basic {
 	@param {Object} obj Object to iterate.
 	@param {function} callback Callback function to execute for each item.
 	*/
-	each<V>(obj: { [key: string]: V }, callback: (value: V, key: string) => boolean): void;
-	each<V>(obj: { [key: number]: V }, callback: (value: V, key: number) => boolean): void;
-	each<V>(obj: V[], callback: (value: V, index: number) => boolean): void;
+	each<V>(obj: { [key: string]: V }, callback: (value: V, key: string) => boolean|void): void;
+	each<V>(obj: { [key: number]: V }, callback: (value: V, key: number) => boolean|void): void;
+	each<V>(obj: V[], callback: (value: V, index: number) => boolean|void): void;
 
 	/**
 	Checks if object is empty.
