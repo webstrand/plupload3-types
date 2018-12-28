@@ -15,7 +15,8 @@ interface UploaderConstructor {
 
 	new(options: Uploader.Options): Uploader;
 }
-interface Uploader extends core.Queue<Uploader.Options> {
+
+interface Uploader extends Uploader.Patch<core.Queue<Uploader.Options>> {
 	/**
 	 * Unique id for the Uploader instance.
 	 *
@@ -168,60 +169,57 @@ interface Uploader extends core.Queue<Uploader.Options> {
 	 * @param {Number} [length] Length of items to remove
 	*/
 	splice(start?: number, length?: number): core.Queueable[];
-
-	/**
-	Dispatches the specified event name and its arguments to all listeners.
-	@method trigger
-	@param {String} name Event name to fire.
-	@param {Object..} Multiple arguments to pass along to the listener functions.
-	*/
-	// moxie.core.EventTarget provides both dispatchEvent and trigger
-	// as aliases to send messages to listeners. plupload.Uploader
-	// events have a different arguments structure, so we don't pass
-	// them onto the EventTarget.
-	dispatchEvent<K extends string|number>(type: K, ...args: Array<K extends keyof Uploader.Dispatches ? Parameters<Uploader.Dispatches[K]> : any[]>): boolean;
-
-	/**
-	Check whether uploader has any listeners to the specified event.
-	@method hasEventListener
-	@param {String} name Event name to check for.
-	*/
-	hasEventListener<K extends string|number>(type: K): moxie.core.EventTarget.ListenerHandle<K extends keyof Uploader.Dispatches ? Uploader.Dispatches[K] : never, unknown>|false;
-	hasEventListener<K extends string|number>(type: K): moxie.core.EventTarget.ListenerHandle<K extends keyof core.Queue.Dispatches ? core.Queue.Dispatches[K] : moxie.core.EventTarget.Callable, unknown>|false;
-
-	/**
-	Adds an event listener by name.
-	@method bind
-	@param {String} name Event name to listen for.
-	@param {function} fn Function to call ones the event gets fired.
-	@param {Object} [scope] Optional scope to execute the specified function in.
-	@param {Number} [priority=0] Priority of the event handler - handlers with higher priorities will be called first
-	*/
-	bind<K extends string|number, T>(type: K, fn: moxie.core.EventTarget.Listener<K extends keyof Uploader.Dispatches ? Uploader.Dispatches[K] : never, T>, scope: T, priority?: number): void;
-	bind<K extends string|number, T>(this: T, type: K, fn: moxie.core.EventTarget.Listener<K extends keyof Uploader.Dispatches ? Uploader.Dispatches[K] : never, T>): void;
-
-	bind<K extends string|number, T>(type: K, fn: moxie.core.EventTarget.Listener<K extends keyof core.Queue.Dispatches ? core.Queue.Dispatches[K] : moxie.core.EventTarget.Callable, T>, scope: T, priority?: number): void;
-	bind<K extends string|number, T>(this: T, type: K, fn: moxie.core.EventTarget.Listener<K extends keyof core.Queue.Dispatches ? core.Queue.Dispatches[K] : moxie.core.EventTarget.Callable, T>): void;
-
-	/**
-	Removes the specified event listener.
-	@method unbind
-	@param {String} name Name of event to remove.
-	@param {function} fn Function to remove from listener.
-	*/
-	unbind<K extends string|number>(type: K, fn?: moxie.core.EventTarget.Listener<K extends keyof Uploader.Dispatches ? Uploader.Dispatches[K] : never, any>): void
-	unbind<K extends string|number>(type: K, fn?: moxie.core.EventTarget.Listener<K extends keyof core.Queue.Dispatches ? core.Queue.Dispatches[K] : moxie.core.EventTarget.Callable, any>): void
-
-	/**
-	Removes all event listeners.
-	@method unbindAll
-	*/
 }
-
-
 
 const Uploader: UploaderConstructor;
 namespace Uploader {
+	/**
+	 * For some reason, the developers of plupload decided that Uploader needed
+	 * a new interface for managing events that's incompatible with the parent
+	 * moxie.core.EventTarget interface. (The real class still inherits from
+	 * EventTarget, though!)
+	 */
+	type EventTarget = {
+		/**
+		Dispatches the specified event name and its arguments to all listeners.
+		@method trigger
+		@param {String} name Event name to fire.
+		@param {Object..} Multiple arguments to pass along to the listener functions.
+		*/
+		// moxie.core.EventTarget provides both dispatchEvent and trigger
+		// as aliases to send messages to listeners. plupload.Uploader
+		// events have a different arguments structure, so we don't pass
+		// them onto the EventTarget.
+		dispatchEvent<K extends string|number>(type: K, ...args: Array<K extends keyof Dispatches ? Parameters<Dispatches[K]> : any[]>): boolean;
+
+		/**
+		Check whether uploader has any listeners to the specified event.
+		@method hasEventListener
+		@param {String} name Event name to check for.
+		*/
+		hasEventListener<K extends string|number>(type: K): moxie.core.EventTarget.ListenerHandle<K extends keyof Dispatches ? Dispatches[K] : never, unknown>|false;
+
+		/**
+		Adds an event listener by name.
+		@method bind
+		@param {String} name Event name to listen for.
+		@param {function} fn Function to call ones the event gets fired.
+		@param {Object} [scope] Optional scope to execute the specified function in.
+		@param {Number} [priority=0] Priority of the event handler - handlers with higher priorities will be called first
+		*/
+		bind<K extends string|number, T>(type: K, fn: moxie.core.EventTarget.Listener<K extends keyof Dispatches ? Dispatches[K] : never, T>, scope: T, priority?: number): void;
+		bind<K extends string|number, T>(this: T, type: K, fn: moxie.core.EventTarget.Listener<K extends keyof Dispatches ? Dispatches[K] : never, T>): void;
+
+
+		/**
+		Removes the specified event listener.
+		@method unbind
+		@param {String} name Name of event to remove.
+		@param {function} fn Function to remove from listener.
+		*/
+		unbind<K extends string|number>(type: K, fn?: moxie.core.EventTarget.Listener<K extends keyof Dispatches ? Dispatches[K] : never, any>): void
+	}
+
 	type ModifiableOptions = core.Queue.Options & {
 		/** undocumented */
 		init?: Partial<Dispatches>;
@@ -379,14 +377,14 @@ namespace Uploader {
 		@event Init
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		*/
-		init: (event: { type: "init" }, uploader: Uploader) => boolean|void;
+		init: (uploader: Uploader) => boolean|void;
 
 		/**
 		Fires after the init event incase you need to perform actions there.
 		@event PostInit
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		*/
-		postinit: (event: { type: "postinit" }, uploader: Uploader) => boolean|void;
+		postinit: (uploader: Uploader) => boolean|void;
 
 		/**
 		Fires when the option is changed in via uploader.setOption().
@@ -397,21 +395,21 @@ namespace Uploader {
 		@param {Mixed} value New value for the specified option
 		@param {Mixed} oldValue Previous value of the option
 		*/
-		optionschanged: (event: { type: "optionschanged" }, uploader: Uploader, name: string, value: unknown) => boolean|void;
+		optionschanged: (uploader: Uploader, name: string, value: unknown) => boolean|void;
 
 		/**
 		Fires when the silverlight/flash or other shim needs to move.
 		@event Refresh
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		*/
-		refresh: (event: { type: "refresh" }, uploader: Uploader) => boolean|void;
+		refresh: (uploader: Uploader) => boolean|void;
 
 		/**
 		Fires when the overall state is being changed for the upload queue.
 		@event StateChanged
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		*/
-		statechanged: (event: { type: "statechanged" }, uploader: Uploader) => boolean|void;
+		statechanged: (uploader: Uploader) => boolean|void;
 
 		/**
 		Fires when browse_button is clicked and browse dialog shows.
@@ -419,7 +417,7 @@ namespace Uploader {
 		@since 2.1.2
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		*/
-		browse: (event: { type: "browse" }, uploader: Uploader) => boolean|void;
+		browse: (uploader: Uploader) => boolean|void;
 
 		/**
 		Fires for every filtered file before it is added to the queue.
@@ -428,14 +426,14 @@ namespace Uploader {
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		@param {plupload.File} file Another file that has to be added to the queue.
 		*/
-		filefiltered: (event: { type: "filefiltered" }, uploader: Uploader, file: File) => boolean|void;
+		filefiltered: (uploader: Uploader, file: File) => boolean|void;
 
 		/**
 		Fires when the file queue is changed. In other words when files are added/removed to the files array of the uploader instance.
 		@event QueueChanged
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		*/
-		queuechanged: (event: { type: "queuechanged" }, uploader: Uploader) => boolean|void;
+		queuechanged: (uploader: Uploader) => boolean|void;
 
 		/**
 		Fires after files were filtered and added to the queue.
@@ -443,7 +441,7 @@ namespace Uploader {
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		@param {Array} files Array of FileUploader objects that were added to the queue by user.
 		*/
-		filesadded: (event: { type: "filesadded" }, uploader: Uploader, files: File[]) => boolean|void;
+		filesadded: (uploader: Uploader, files: File[]) => boolean|void;
 
 		/**
 		Fires when file is removed from the queue.
@@ -451,7 +449,7 @@ namespace Uploader {
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		@param {Array} files Array of files that got removed.
 		*/
-		filesremoved: (event: { type: "filesremoved" }, uploader: Uploader, files: File[]) => boolean|void;
+		filesremoved: (uploader: Uploader, files: File[]) => boolean|void;
 
 
 		/**
@@ -461,7 +459,7 @@ namespace Uploader {
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		@param {plupload.File} file File to be uploaded.
 		*/
-		beforeupload: (event: { type: "beforeupload" }, uploader: Uploader, file: File) => boolean|void;
+		beforeupload: (uploader: Uploader, file: File) => boolean|void;
 
 		/**
 		Fires when a file is to be uploaded by the runtime.
@@ -469,7 +467,7 @@ namespace Uploader {
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		@param {plupload.File} file File to be uploaded.
 		*/
-		uploadfile: (event: { type: "uploadfile" }, uploader: Uploader, file: File) => boolean|void;
+		uploadfile: (uploader: Uploader, file: File) => boolean|void;
 
 		/**
 		Fires while a file is being uploaded. Use this event to update the current file upload progress.
@@ -477,7 +475,7 @@ namespace Uploader {
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		@param {plupload.File} file File that is currently being uploaded.
 		*/
-		uploadprogress: (event: { type: "uploadprogress" }, uploader: Uploader, file: File) => boolean|void;
+		uploadprogress: (uploader: Uploader, file: File) => boolean|void;
 
 		/**
 		Fires when file chunk is uploaded.
@@ -491,7 +489,7 @@ namespace Uploader {
 			@param {Number} result.status The HTTP status code sent by the server.
 			@param {String} result.responseHeaders All the response headers as a single string.
 		*/
-		chunkuploaded: (event: { type: "chunkuploaded" }, uploader: Uploader, file: File, result: { offset: number, total: number, response: string, status: number, responseHeaders: string }) => boolean|void;
+		chunkuploaded: (uploader: Uploader, file: File, result: { offset: number, total: number, response: string, status: number, responseHeaders: string }) => boolean|void;
 
 		/**
 		Fires when a file is successfully uploaded.
@@ -503,14 +501,14 @@ namespace Uploader {
 			@param {Number} result.status The HTTP status code sent by the server.
 			@param {String} result.responseHeaders All the response headers as a single string.
 		*/
-		fileuploaded: (event: { type: "fileuploaded" }, uploader: Uploader, file: File, result: { response: string, status: number, responseHeaders: string }) => boolean|void;
+		fileuploaded: (uploader: Uploader, file: File, result: { response: string, status: number, responseHeaders: string }) => boolean|void;
 
 		/**
 		Fires when all files in a queue are uploaded
 		@event UploadComplete
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		*/
-		uploadcomplete: (event: { type: "uploadcomplete" }, uploader: Uploader) => boolean|void;
+		uploadcomplete: (uploader: Uploader) => boolean|void;
 
 
 		/**
@@ -518,7 +516,7 @@ namespace Uploader {
 		@event CancelUpload
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		*/
-		cancelupload: (event: { type: "cancelupload" }, uploader: Uploader) => boolean|void;
+		cancelupload: (uploader: Uploader) => boolean|void;
 
 		/**
 		Fires when a error occurs.
@@ -528,15 +526,17 @@ namespace Uploader {
 			@param {Number} error.code The plupload error code.
 			@param {String} error.message Description of the error (uses i18n).
 		*/
-		error: (event: { type: "error" }, uploader: Uploader, error: { code: number, message: string }) => boolean|void;
+		error: (uploader: Uploader, error: { code: number, message: string }) => boolean|void;
 
 		/**
 		Fires when destroy method is called.
 		@event Destroy
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		*/
-		destroy: (event: { type: "destroy" }, uploader: Uploader) => boolean|void;
+		destroy: (uploader: Uploader) => boolean|void;
 	};
+
+	type Patch<Base> = { [P in keyof Base]: P extends keyof Uploader.EventTarget ? Uploader.EventTarget[P] : Base[P] };
 
 	namespace Options {
 		interface Filters {
