@@ -292,7 +292,7 @@ namespace Uploader {
 		`image/png` only. `e.g. {width : 200, height : 200, quality : 90, crop:
 		true}`
 		*/
-		resize?: Options.Resize;
+		resize?: moxie.image.Image.ResizeOptions;
 
 		/**
 		Whether to send file name as additional argument - 'name' (required for
@@ -543,7 +543,7 @@ namespace Uploader {
 			"jpg,jpeg,gif,png"}`. Dispatches `plupload.FILE_EXTENSION_ERROR`
 			Default: []
 			*/
-			mime_types?: MimeType[];
+			mime_types?: moxie.core.utils.Mime.MimeType[];
 
 			/**
 			Maximum file size that the user can pick, in bytes. Optionally
@@ -560,86 +560,6 @@ namespace Uploader {
 			*/
 			prevent_duplicates?: boolean;
 		}
-
-		namespace Filters {
-			interface MimeType {
-				title: string,
-				extensions: string
-			}
-		}
-
-		interface ResizeWh extends _Resize {
-			/**
-			Resulting width
-			*/
-			width: number;
-
-			/**
-			Resulting height (optional, if not supplied will default to width)
-			Default: {width}
-			*/
-			height?: number;
-		}
-
-		interface ResizeHw extends _Resize {
-			/**
-			Resulting width
-			*/
-			width?: number;
-
-			/**
-			Resulting height (optional, if not supplied will default to width)
-			Default: {width}
-			*/
-			height: number;
-		}
-
-		interface _Resize {
-			/**
-			MIME type of the resulting image
-			Default: 'image/jpeg'
-			*/
-			type?: string;
-
-			/**
-			In the case of JPEG, controls the quality of resulting image
-			Default: 90
-			*/
-			quality?: number;
-
-			/**
-			If not falsy, image will be cropped, by default from center
-			Default: 'cc'
-			*/
-			crop?: boolean;
-
-			/**
-			In case of crop whether to upscale the image to fit the exact
-			dimensions
-			Default: true
-			*/
-			fit?: boolean;
-
-			/**
-			Whether to preserve meta headers (on JPEGs after resize)
-			Default: true
-			*/
-			preserveHeaders?: boolean;
-
-			/**
-			Resampling algorithm to use during resize
-			Default: 'default'
-			*/
-			resample?: string;
-
-			/**
-			Whether to scale the image in steps (results in better quality)
-			Default: true
-			*/
-			multipass?: boolean;
-		}
-
-		type Resize = (ResizeWh|ResizeHw);
 	}
 }
 }
