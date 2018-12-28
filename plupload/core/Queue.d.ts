@@ -89,10 +89,10 @@ interface Queue<Options = {}, Dispatches = {}> extends Queueable<Options & Queue
 const Queue: QueueConstructor;
 namespace Queue {
 	type Options = Queueable.Options & {
-		max_slots: number,
-		max_retries: number,
-		auto_start: boolean,
-		finish_active: boolean
+		max_slots?: number,
+		max_retries?: number,
+		auto_start?: boolean,
+		finish_active?: boolean
 	};
 	type Dispatches = Queueable.Dispatches & {
 
