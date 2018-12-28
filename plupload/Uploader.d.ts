@@ -220,6 +220,12 @@ interface Uploader extends core.Queue<Uploader.Options> {
 const Uploader: UploaderConstructor;
 namespace Uploader {
 	type ModifiableOptions = core.Queue.Options & {
+		/** undocumented */
+		init?: Partial<Dispatches>;
+
+		/** undocumented */
+		preinit?: Partial<Dispatches>;
+
 		/**
 		Chunk size in bytes to slice the file into. Shorcuts with b, kb, mb, gb,
 		tb suffixes also supported. `e.g. 204800 or "204800b" or "200kb"`. By
@@ -306,6 +312,18 @@ namespace Uploader {
 		URL of the server-side upload handler.
 		*/
 		url: string;
+
+		/** undocumented */
+		preferred_caps?: boolean;
+
+		/** undocumented, class name to add to the button */
+		browse_button_hover?: string;
+
+		/** undocumented, class name to add to the button */
+		browse_button_active?: string;
+
+		/** undocumented, this option is automatically generated */
+		re_ext_filter?: RegExp;
 	}
 
 	type Options = ModifiableOptions & {
