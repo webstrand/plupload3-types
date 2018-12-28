@@ -56,35 +56,35 @@ namespace FileDrop {
 		@event ready
 		@param {Object} event
 		*/
-		ready: (event: { type: 'ready' }) => boolean|undefined|void;
+		ready: (event: { type: 'ready' }) => boolean|void;
 
 		/**
 		Dispatched when dragging cursor enters the drop zone.
 		@event dragenter
 		@param {Object} event
 		*/
-		dragenter: (event: { type: 'dragenter' }) => boolean|undefined|void;
+		dragenter: (event: { type: 'dragenter' }) => boolean|void;
 
 		/**
 		Dispatched when dragging cursor leaves the drop zone.
 		@event dragleave
 		@param {Object} event
 		*/
-		dragleave: (event: { type: 'dragleave' }) => boolean|undefined|void;
+		dragleave: (event: { type: 'dragleave' }) => boolean|void;
 
 		/**
 		Dispatched when file is dropped onto the drop zone.
 		@event drop
 		@param {Object} event
 		*/
-		drop: (event: { type: 'drop' }) => boolean|undefined|void;
+		drop: (event: { type: 'drop' }) => boolean|void;
 
 		/**
 		Dispatched if error occurs.
 		@event error
 		@param {Object} event
 		*/
-		error: (event: { type: 'error' }) => boolean|undefined|void;
+		error: (event: { type: 'error' }) => boolean|void;
 	};
 }
 }}

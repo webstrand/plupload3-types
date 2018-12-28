@@ -217,6 +217,9 @@ interface Uploader extends core.Queue<Uploader.Options> {
 	@method unbindAll
 	*/
 }
+
+
+
 const Uploader: UploaderConstructor;
 namespace Uploader {
 	type ModifiableOptions = core.Queue.Options & {
@@ -376,14 +379,14 @@ namespace Uploader {
 		@event Init
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		*/
-		init: (event: { type: "init" }, uploader: Uploader) => boolean|undefined;
+		init: (event: { type: "init" }, uploader: Uploader) => boolean|void;
 
 		/**
 		Fires after the init event incase you need to perform actions there.
 		@event PostInit
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		*/
-		postinit: (event: { type: "postinit" }, uploader: Uploader) => boolean|undefined;
+		postinit: (event: { type: "postinit" }, uploader: Uploader) => boolean|void;
 
 		/**
 		Fires when the option is changed in via uploader.setOption().
@@ -394,21 +397,21 @@ namespace Uploader {
 		@param {Mixed} value New value for the specified option
 		@param {Mixed} oldValue Previous value of the option
 		*/
-		optionschanged: (event: { type: "optionschanged" }, uploader: Uploader, name: string, value: unknown) => boolean|undefined;
+		optionschanged: (event: { type: "optionschanged" }, uploader: Uploader, name: string, value: unknown) => boolean|void;
 
 		/**
 		Fires when the silverlight/flash or other shim needs to move.
 		@event Refresh
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		*/
-		refresh: (event: { type: "refresh" }, uploader: Uploader) => boolean|undefined;
+		refresh: (event: { type: "refresh" }, uploader: Uploader) => boolean|void;
 
 		/**
 		Fires when the overall state is being changed for the upload queue.
 		@event StateChanged
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		*/
-		statechanged: (event: { type: "statechanged" }, uploader: Uploader) => boolean|undefined;
+		statechanged: (event: { type: "statechanged" }, uploader: Uploader) => boolean|void;
 
 		/**
 		Fires when browse_button is clicked and browse dialog shows.
@@ -416,7 +419,7 @@ namespace Uploader {
 		@since 2.1.2
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		*/
-		browse: (event: { type: "browse" }, uploader: Uploader) => boolean|undefined;
+		browse: (event: { type: "browse" }, uploader: Uploader) => boolean|void;
 
 		/**
 		Fires for every filtered file before it is added to the queue.
@@ -425,14 +428,14 @@ namespace Uploader {
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		@param {plupload.File} file Another file that has to be added to the queue.
 		*/
-		filefiltered: (event: { type: "filefiltered" }, uploader: Uploader, file: File) => boolean|undefined;
+		filefiltered: (event: { type: "filefiltered" }, uploader: Uploader, file: File) => boolean|void;
 
 		/**
 		Fires when the file queue is changed. In other words when files are added/removed to the files array of the uploader instance.
 		@event QueueChanged
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		*/
-		queuechanged: (event: { type: "queuechanged" }, uploader: Uploader) => boolean|undefined;
+		queuechanged: (event: { type: "queuechanged" }, uploader: Uploader) => boolean|void;
 
 		/**
 		Fires after files were filtered and added to the queue.
@@ -440,7 +443,7 @@ namespace Uploader {
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		@param {Array} files Array of FileUploader objects that were added to the queue by user.
 		*/
-		filesadded: (event: { type: "filesadded" }, uploader: Uploader, files: File[]) => boolean|undefined;
+		filesadded: (event: { type: "filesadded" }, uploader: Uploader, files: File[]) => boolean|void;
 
 		/**
 		Fires when file is removed from the queue.
@@ -448,7 +451,7 @@ namespace Uploader {
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		@param {Array} files Array of files that got removed.
 		*/
-		filesremoved: (event: { type: "filesremoved" }, uploader: Uploader, files: File[]) => boolean|undefined;
+		filesremoved: (event: { type: "filesremoved" }, uploader: Uploader, files: File[]) => boolean|void;
 
 
 		/**
@@ -458,7 +461,7 @@ namespace Uploader {
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		@param {plupload.File} file File to be uploaded.
 		*/
-		beforeupload: (event: { type: "beforeupload" }, uploader: Uploader, file: File) => boolean|undefined;
+		beforeupload: (event: { type: "beforeupload" }, uploader: Uploader, file: File) => boolean|void;
 
 		/**
 		Fires when a file is to be uploaded by the runtime.
@@ -466,7 +469,7 @@ namespace Uploader {
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		@param {plupload.File} file File to be uploaded.
 		*/
-		uploadfile: (event: { type: "uploadfile" }, uploader: Uploader, file: File) => boolean|undefined;
+		uploadfile: (event: { type: "uploadfile" }, uploader: Uploader, file: File) => boolean|void;
 
 		/**
 		Fires while a file is being uploaded. Use this event to update the current file upload progress.
@@ -474,7 +477,7 @@ namespace Uploader {
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		@param {plupload.File} file File that is currently being uploaded.
 		*/
-		uploadprogress: (event: { type: "uploadprogress" }, uploader: Uploader, file: File) => boolean|undefined;
+		uploadprogress: (event: { type: "uploadprogress" }, uploader: Uploader, file: File) => boolean|void;
 
 		/**
 		Fires when file chunk is uploaded.
@@ -488,7 +491,7 @@ namespace Uploader {
 			@param {Number} result.status The HTTP status code sent by the server.
 			@param {String} result.responseHeaders All the response headers as a single string.
 		*/
-		chunkuploaded: (event: { type: "chunkuploaded" }, uploader: Uploader, file: File, result: { offset: number, total: number, response: string, status: number, responseHeaders: string }) => boolean|undefined;
+		chunkuploaded: (event: { type: "chunkuploaded" }, uploader: Uploader, file: File, result: { offset: number, total: number, response: string, status: number, responseHeaders: string }) => boolean|void;
 
 		/**
 		Fires when a file is successfully uploaded.
@@ -500,14 +503,14 @@ namespace Uploader {
 			@param {Number} result.status The HTTP status code sent by the server.
 			@param {String} result.responseHeaders All the response headers as a single string.
 		*/
-		fileuploaded: (event: { type: "fileuploaded" }, uploader: Uploader, file: File, result: { response: string, status: number, responseHeaders: string }) => boolean|undefined;
+		fileuploaded: (event: { type: "fileuploaded" }, uploader: Uploader, file: File, result: { response: string, status: number, responseHeaders: string }) => boolean|void;
 
 		/**
 		Fires when all files in a queue are uploaded
 		@event UploadComplete
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		*/
-		uploadcomplete: (event: { type: "uploadcomplete" }, uploader: Uploader) => boolean|undefined;
+		uploadcomplete: (event: { type: "uploadcomplete" }, uploader: Uploader) => boolean|void;
 
 
 		/**
@@ -515,7 +518,7 @@ namespace Uploader {
 		@event CancelUpload
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		*/
-		cancelupload: (event: { type: "cancelupload" }, uploader: Uploader) => boolean|undefined;
+		cancelupload: (event: { type: "cancelupload" }, uploader: Uploader) => boolean|void;
 
 		/**
 		Fires when a error occurs.
@@ -525,14 +528,14 @@ namespace Uploader {
 			@param {Number} error.code The plupload error code.
 			@param {String} error.message Description of the error (uses i18n).
 		*/
-		error: (event: { type: "error" }, uploader: Uploader, error: { code: number, message: string }) => boolean|undefined;
+		error: (event: { type: "error" }, uploader: Uploader, error: { code: number, message: string }) => boolean|void;
 
 		/**
 		Fires when destroy method is called.
 		@event Destroy
 		@param {plupload.Uploader} uploader Uploader instance sending the event.
 		*/
-		destroy: (event: { type: "destroy" }, uploader: Uploader) => boolean|undefined;
+		destroy: (event: { type: "destroy" }, uploader: Uploader) => boolean|void;
 	};
 
 	namespace Options {

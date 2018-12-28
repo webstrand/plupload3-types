@@ -32,9 +32,9 @@ interface Queue<Options = {}, Dispatches = {}> extends Queueable<Options & Queue
 
 	@method start
 	*/
-	start(): boolean|undefined|void;
+	start(): boolean|void;
 
-	pause(): boolean|undefined|void;
+	pause(): boolean|void;
 
 	/**
 	Stop the queue. If `finish_active=true` the queue will wait until active items are done, before
@@ -42,7 +42,7 @@ interface Queue<Options = {}, Dispatches = {}> extends Queueable<Options & Queue
 
 	@method stop
 	*/
-	stop(): boolean|undefined|void;
+	stop(): boolean|void;
 
 	forEachItem(cb: (value: Queueable, index: number) => boolean): void;
 
@@ -74,17 +74,17 @@ interface Queue<Options = {}, Dispatches = {}> extends Queueable<Options & Queue
 	*/
 	removeItem(uid: string): boolean;
 
-	stopItem(uid: string): boolean|undefined|void;
-	pauseItem(uid: string): boolean|undefined|void;
-	resumeItem(uid: string): boolean|undefined|void;
+	stopItem(uid: string): boolean|void;
+	pauseItem(uid: string): boolean|void;
+	resumeItem(uid: string): boolean|void;
 	splice(start?: number, length?: number): Queueable[];
 	isActive(): boolean;
 	isStopped(): boolean;
 	countSpareSlots(): number;
 	toArray(): Queueable[];
-	clear(): boolean|undefined|void;
+	clear(): boolean|void;
 	calcStats(): boolean;
-	destroy(): boolean|undefined|void;
+	destroy(): boolean|void;
 }
 const Queue: QueueConstructor;
 namespace Queue {
@@ -102,7 +102,7 @@ namespace Queue {
 		@event started
 		@param {Object} event
 		*/
-		started: (event: { type: "started" }) => boolean|undefined|void;
+		started: (event: { type: "started" }) => boolean|void;
 
 		/**
 		Dispatched as activity progresses
@@ -113,7 +113,7 @@ namespace Queue {
 		@param {Number} total
 		@param {plupload.core.Stats} stats
 		*/
-		progress: (event: { type: "progress" }, processed: number, total: number, stats: Stats) => boolean|undefined|void;
+		progress: (event: { type: "progress" }, processed: number, total: number, stats: Stats) => boolean|void;
 
 		/**
 		Dispatched when activity is paused
@@ -121,7 +121,7 @@ namespace Queue {
 		@event paused
 		@param {Object} event
 		*/
-		paused: (event: { type: "paused" }) => boolean|undefined|void;
+		paused: (event: { type: "paused" }) => boolean|void;
 
 		/**
 		Dispatched when there's no more items in processing
@@ -129,7 +129,7 @@ namespace Queue {
 		@event done
 		@param {Object} event
 		*/
-		done: (event: { type: "done" }) => boolean|undefined|void;
+		done: (event: { type: "done" }) => boolean|void;
 
 		/**
 		Dispatched as soon as activity ends
@@ -137,7 +137,7 @@ namespace Queue {
 		@event stopped
 		@param {Object} event
 		*/
-		stopped: (event: { type: "stopped" }) => boolean|undefined|void;
+		stopped: (event: { type: "stopped" }) => boolean|void;
 
 		/**
 		Dispatched when queue is destroyed
@@ -145,7 +145,7 @@ namespace Queue {
 		@event destroy
 		@param {Object} event
 		*/
-		destroy: (event: { type: "destroy" }) => boolean|undefined|void;
+		destroy: (event: { type: "destroy" }) => boolean|void;
 	};
 }
 }}

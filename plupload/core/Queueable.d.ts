@@ -55,14 +55,14 @@ interface Queueable<Options = {}, Dispatches = {}> extends Optionable<Options & 
 	*/
 	processedTimestamp: number;
 
-	start(): boolean|undefined|void;
-	pause(): boolean|undefined|void;
-	resume(): boolean|undefined|void;
-	stop(): boolean|undefined|void;
-	done(result: any): boolean|undefined|void;
-	failed(result: any): boolean|undefined|void;
+	start(): boolean|void;
+	pause(): boolean|void;
+	resume(): boolean|void;
+	stop(): boolean|void;
+	done(result: any): boolean|void;
+	failed(result: any): boolean|void;
 	progress(processed: number, total?: number): void;
-	destroy(): boolean|undefined|void;
+	destroy(): boolean|void;
 }
 const Queueable: QueueableConstructor;
 namespace Queueable {
@@ -76,7 +76,7 @@ namespace Queueable {
 		* @param {Number} state New state
 		* @param {Number} prevState Previous state
 		*/
-		statechanged: (event: { type: 'statechanged' }, state: QueueableState, prevState: QueueableState) => boolean|undefined|void;
+		statechanged: (event: { type: 'statechanged' }, state: QueueableState, prevState: QueueableState) => boolean|void;
 
 		/**
 		* Dispatched when the item is put on pending list
@@ -84,7 +84,7 @@ namespace Queueable {
 		* @event queued
 		* @param {Object} event
 		*/
-		queued: (event: { type: 'queued' }) => boolean|undefined|void;
+		queued: (event: { type: 'queued' }) => boolean|void;
 
 		/**
 		* Dispatched as soon as activity starts
@@ -92,13 +92,13 @@ namespace Queueable {
 		* @event started
 		* @param {Object} event
 		*/
-		started: (event: { type: 'started' }) => boolean|undefined|void;
+		started: (event: { type: 'started' }) => boolean|void;
 
-		paused: (event: { type: 'paused' }) => boolean|undefined|void;
+		paused: (event: { type: 'paused' }) => boolean|void;
 
-		resumed: (event: { type: 'resumed' }) => boolean|undefined|void;
+		resumed: (event: { type: 'resumed' }) => boolean|void;
 
-		stopped: (event: { type: 'stopped' }) => boolean|undefined|void;
+		stopped: (event: { type: 'stopped' }) => boolean|void;
 
 		/**
 		* Dispatched as the activity progresses
@@ -109,15 +109,15 @@ namespace Queueable {
 		*      @param {Number} [event.processed]
 		*      @param {Number} [event.total]
 		*/
-		progress: (event: moxie.core.EventTarget.Event.Progress<"progress">) => boolean|undefined|void;
+		progress: (event: moxie.core.EventTarget.Event.Progress<"progress">) => boolean|void;
 
-		failed: (event: { type: 'failed' }, result: any) => boolean|undefined|void;
+		failed: (event: { type: 'failed' }, result: any) => boolean|void;
 
-		done: (event: { type: 'done' }, result: any) => boolean|undefined|void;
+		done: (event: { type: 'done' }, result: any) => boolean|void;
 
-		processed: (event: { type: 'processed' }) => boolean|undefined|void;
+		processed: (event: { type: 'processed' }) => boolean|void;
 
-		destroy: (event: { type: 'destroy' }) => boolean|undefined|void;
+		destroy: (event: { type: 'destroy' }) => boolean|void;
 	}
 }
 

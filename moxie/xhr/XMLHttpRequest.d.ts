@@ -199,14 +199,14 @@ class XMLHttpRequest extends core.EventTarget<XMLHttpRequest.Dispatches> {
 }
 namespace XMLHttpRequest {
 	type Dispatches = {
-		loadstart: (event: { type: 'loadstart' }) => boolean|undefined|void;
-		progress: (event: { type: 'progress' }) => boolean|undefined|void;
-		abort: (event: { type: 'abort' }) => boolean|undefined|void;
-		error: (event: { type: 'error' }) => boolean|undefined|void;
-		load: (event: { type: 'load' }) => boolean|undefined|void;
-		timeout: (event: { type: 'timeout' }) => boolean|undefined|void;
-		loadend: (event: { type: 'loadend' }) => boolean|undefined|void;
-		readystatechange: (event: { type: 'readystatechange' }) => boolean|undefined|void;
+		loadstart: (event: { type: 'loadstart' }) => boolean|void;
+		progress: (event: { type: 'progress' }) => boolean|void;
+		abort: (event: { type: 'abort' }) => boolean|void;
+		error: (event: { type: 'error' }) => boolean|void;
+		load: (event: { type: 'load' }) => boolean|void;
+		timeout: (event: { type: 'timeout' }) => boolean|void;
+		loadend: (event: { type: 'loadend' }) => boolean|void;
+		readystatechange: (event: { type: 'readystatechange' }) => boolean|void;
 	}
 }
 }}

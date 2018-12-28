@@ -119,42 +119,42 @@ namespace FileReader {
 		@event loadstart
 		@param {Object} event
 		*/
-		loadstart: (event: { type: 'loadstart' }) => boolean|undefined|void;
+		loadstart: (event: { type: 'loadstart' }) => boolean|void;
 
 		/**
 		Dispatched while reading (and decoding) blob, and reporting partial Blob data (progess.loaded/progress.total).
 		@event progress
 		@param {Object} event
 		*/
-		progress: (event: { type: 'progress' }) => boolean|undefined|void;
+		progress: (event: { type: 'progress' }) => boolean|void;
 
 		/**
 		Dispatched when the read has successfully completed.
 		@event load
 		@param {Object} event
 		*/
-		load: (event: { type: 'load' }) => boolean|undefined|void;
+		load: (event: { type: 'load' }) => boolean|void;
 
 		/**
 		Dispatched when the read has been aborted. For instance, by invoking the abort() method.
 		@event abort
 		@param {Object} event
 		*/
-		abort: (event: { type: 'abort' }) => boolean|undefined|void;
+		abort: (event: { type: 'abort' }) => boolean|void;
 
 		/**
 		Dispatched when the read has failed.
 		@event error
 		@param {Object} event
 		*/
-		error: (event: { type: 'error' }) => boolean|undefined|void;
+		error: (event: { type: 'error' }) => boolean|void;
 
 		/**
 		Dispatched when the request has completed (either in success or failure).
 		@event loadend
 		@param {Object} event
 		*/
-		loadend: (event: { type: 'loadend' }) => boolean|undefined|void;
+		loadend: (event: { type: 'loadend' }) => boolean|void;
 	};
 }
 }}

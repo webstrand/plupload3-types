@@ -138,7 +138,7 @@ namespace FileInput {
 		@event ready
 		@param {Object} event
 		*/
-		ready: (event: { type: 'ready' }) => boolean|undefined|void;
+		ready: (event: { type: 'ready' }) => boolean|void;
 
 		/**
 		Dispatched right after [ready](#event_ready) event, and whenever [refresh()](#method_refresh) is invoked.
@@ -146,15 +146,15 @@ namespace FileInput {
 		@event refresh
 		@param {Object} event
 		*/
-		refresh: (event: { type: 'refresh' }) => boolean|undefined|void;
+		refresh: (event: { type: 'refresh' }) => boolean|void;
 		/**
 		Dispatched when selection of files in the dialog is complete.
 		@event change
 		@param {Object} event
 		*/
-		change: (event: { type: 'change' }) => boolean|undefined|void;
+		change: (event: { type: 'change' }) => boolean|void;
 
-		cancel: (event: { type: 'cancel' }) => boolean|undefined|void; // TODO: might be useful
+		cancel: (event: { type: 'cancel' }) => boolean|void; // TODO: might be useful
 
 		/**
 		Dispatched when mouse cursor enters file-picker area. Can be used to style element
@@ -162,7 +162,7 @@ namespace FileInput {
 		@event mouseenter
 		@param {Object} event
 		*/
-		mouseenter: (event: { type: 'mouseenter' }) => boolean|undefined|void;
+		mouseenter: (event: { type: 'mouseenter' }) => boolean|void;
 
 		/**
 		Dispatched when mouse cursor leaves file-picker area. Can be used to style element
@@ -170,21 +170,21 @@ namespace FileInput {
 		@event mouseleave
 		@param {Object} event
 		*/
-		mouseleave: (event: { type: 'mouseleave' }) => boolean|undefined|void;
+		mouseleave: (event: { type: 'mouseleave' }) => boolean|void;
 
 		/**
 		Dispatched when functional mouse button is pressed on top of file-picker area.
 		@event mousedown
 		@param {Object} event
 		*/
-		mousedown: (event: { type: 'mousedown' }) => boolean|undefined|void;
+		mousedown: (event: { type: 'mousedown' }) => boolean|void;
 
 		/**
 		Dispatched when functional mouse button is released on top of file-picker area.
 		@event mouseup
 		@param {Object} event
 		*/
-		mouseup: (event: { type: 'mouseup' }) => boolean|undefined|void;
+		mouseup: (event: { type: 'mouseup' }) => boolean|void;
 	};
 }
 }}
