@@ -1,10 +1,10 @@
 declare namespace plupload { namespace core {
 
-interface QueueConstructor<Options = {}, Dispatches = {}> {
-	prototype: Queue<Options, Dispatches>;
-	new(options: Queue.Options): Queue<Options, Dispatches>;
+interface QueueConstructor {
+	prototype: Queue<any, any>;
+	new<Options = {}, Dispatches extends moxie.core.EventTarget.Dispatchable=Queue.Dispatches.Top<Options>>(options: Queue.Options): Queue<Options, Dispatches>;
 }
-interface Queue<Options = {}, Dispatches = {}> extends Queueable<Options & Queue.Options, Dispatches & Queue.Dispatches>{
+interface Queue<Options = {}, Dispatches extends moxie.core.EventTarget.Dispatchable=Queue.Dispatches.Top<Options>> extends Queueable<Options & Queue.Options, Dispatches>{
 	/**
 	@property _queue
 	@type {Collection}
@@ -54,7 +54,7 @@ interface Queue<Options = {}, Dispatches = {}> extends Queueable<Options & Queue
 	@method addItem
 	@param {Queueable} item
 	*/
-	addItem<O,D>(item: Queueable<O,D>): void;
+	addItem<O,D extends moxie.core.EventTarget.Dispatchable>(item: Queueable<O,D>): void;
 
 	/**
 	Extracts item from the queue by its uid and returns it.
@@ -94,7 +94,7 @@ namespace Queue {
 		auto_start?: boolean,
 		finish_active?: boolean
 	};
-	type Dispatches = Queueable.Dispatches & {
+	type Dispatches<T> = Queueable.Dispatches<T> & {
 
 		/**
 		Dispatched as soon as activity starts
@@ -102,7 +102,7 @@ namespace Queue {
 		@event started
 		@param {Object} event
 		*/
-		started: (event: { type: "started" }) => boolean|void;
+		started: (event: { type: "started"; target: T }) => boolean|void;
 
 		/**
 		Dispatched as activity progresses
@@ -113,7 +113,7 @@ namespace Queue {
 		@param {Number} total
 		@param {plupload.core.Stats} stats
 		*/
-		progress: (event: { type: "progress" }, processed: number, total: number, stats: Stats) => boolean|void;
+		progress: (event: { type: "progress"; target: T }, processed: number, total: number, stats: Stats) => boolean|void;
 
 		/**
 		Dispatched when activity is paused
@@ -121,7 +121,7 @@ namespace Queue {
 		@event paused
 		@param {Object} event
 		*/
-		paused: (event: { type: "paused" }) => boolean|void;
+		paused: (event: { type: "paused"; target: T }) => boolean|void;
 
 		/**
 		Dispatched when there's no more items in processing
@@ -129,7 +129,7 @@ namespace Queue {
 		@event done
 		@param {Object} event
 		*/
-		done: (event: { type: "done" }) => boolean|void;
+		done: (event: { type: "done"; target: T }) => boolean|void;
 
 		/**
 		Dispatched as soon as activity ends
@@ -137,7 +137,7 @@ namespace Queue {
 		@event stopped
 		@param {Object} event
 		*/
-		stopped: (event: { type: "stopped" }) => boolean|void;
+		stopped: (event: { type: "stopped"; target: T }) => boolean|void;
 
 		/**
 		Dispatched when queue is destroyed
@@ -145,7 +145,12 @@ namespace Queue {
 		@event destroy
 		@param {Object} event
 		*/
-		destroy: (event: { type: "destroy" }) => boolean|void;
+		destroy: (event: { type: "destroy"; target: T }) => boolean|void;
 	};
+	namespace Dispatches {
+		type Top<Options> = Dispatches<Queue<Options, Dispatches<Queue<Options,any>>>>;
+	}
+
+
 }
 }}

@@ -114,7 +114,7 @@ class EventTarget<Dispatches extends EventTarget.Dispatchable=EventTarget.Dispat
 	handleEventProps(dispatches: string[]): void;
 }
 namespace EventTarget {
-	type Dispatches = {};
+	type Dispatches<T=never> = {};
 	type Callable = (this: any, event: any, ...args: any[]) => boolean|void;
 	type Dispatchable = {
 		[key: string]: Callable;

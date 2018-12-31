@@ -1,9 +1,9 @@
 declare namespace plupload { namespace core {
 interface OptionableConstructor {
 	prototype: Optionable;
-	new(): Optionable;
+	new<Options={}, Dispatches extends moxie.core.EventTarget.Dispatchable=Optionable.Dispatches.Top<Options>>(): Optionable<Options,Dispatches>;
 }
-interface Optionable<Options = {}, Dispatches extends moxie.core.EventTarget.Dispatchable = {}> extends moxie.core.EventTarget<Dispatches & Optionable.Dispatches> {
+interface Optionable<Options={}, Dispatches extends moxie.core.EventTarget.Dispatchable=Optionable.Dispatches.Top<Options>> extends moxie.core.EventTarget<Dispatches> {
 	_options: Options;
 
 	/**
@@ -48,7 +48,10 @@ interface Optionable<Options = {}, Dispatches extends moxie.core.EventTarget.Dis
 const Optionable: OptionableConstructor;
 namespace Optionable {
 	type Options = {};
-	type Dispatches = moxie.core.EventTarget.Dispatches & {};
+	type Dispatches<T> = moxie.core.EventTarget.Dispatches<T>;
+	namespace Dispatches {
+		type Top<Options> = Dispatches<Optionable<Options,Dispatches<Optionable<Options,any>>>>;
+	}
 
 	type Configuration<T> = Partial<T> & { [key: string]: any, [key: number]: any };
 }
