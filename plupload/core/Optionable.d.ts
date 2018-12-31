@@ -48,6 +48,12 @@ interface Optionable<Options={}, Dispatches extends moxie.core.EventTarget.Dispa
 const Optionable: OptionableConstructor;
 namespace Optionable {
 	type Options = {};
+
+	type Event<K extends string=string,T=Optionable<any>> = moxie.core.EventTarget.Event<K,T>;
+	namespace Event {
+		type Progress<K extends string=string,T=Optionable<any>> = moxie.core.EventTarget.Event.Progress<K,T>
+	}
+
 	type Dispatches<T> = moxie.core.EventTarget.Dispatches<T>;
 	namespace Dispatches {
 		type Top<Options> = Dispatches<Optionable<Options,Dispatches<Optionable<Options,any>>>>;

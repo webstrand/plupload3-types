@@ -67,6 +67,12 @@ interface Queueable<Options = {}, Dispatches extends moxie.core.EventTarget.Disp
 const Queueable: QueueableConstructor;
 namespace Queueable {
 	type Options = Optionable.Options & {};
+
+	type Event<K extends string=string,T=Queueable<any>> = Optionable.Event<K,T>;
+	namespace Event {
+		type Progress<K extends string=string,T=Queueable<any>> = Optionable.Event.Progress<K,T>
+	}
+
 	type Dispatches<T> = Optionable.Dispatches<T> & {
 		/**
 		* Dispatched every time the state of queue changes
@@ -76,7 +82,7 @@ namespace Queueable {
 		* @param {Number} state New state
 		* @param {Number} prevState Previous state
 		*/
-		statechanged: (event: { type: 'statechanged'; target: T }, state: QueueableState, prevState: QueueableState) => boolean|void;
+		statechanged: (event: Event<'statechanged', T>, state: QueueableState, prevState: QueueableState) => boolean|void;
 
 		/**
 		* Dispatched when the item is put on pending list
@@ -84,7 +90,7 @@ namespace Queueable {
 		* @event queued
 		* @param {Object} event
 		*/
-		queued: (event: { type: 'queued'; target: T }) => boolean|void;
+		queued: (event: Event<'queued', T>) => boolean|void;
 
 		/**
 		* Dispatched as soon as activity starts
@@ -92,13 +98,13 @@ namespace Queueable {
 		* @event started
 		* @param {Object} event
 		*/
-		started: (event: { type: 'started'; target: T }) => boolean|void;
+		started: (event: Event<'started', T>) => boolean|void;
 
-		paused: (event: { type: 'paused'; target: T }) => boolean|void;
+		paused: (event: Event<'paused', T>) => boolean|void;
 
-		resumed: (event: { type: 'resumed'; target: T }) => boolean|void;
+		resumed: (event: Event<'resumed', T>) => boolean|void;
 
-		stopped: (event: { type: 'stopped'; target: T }) => boolean|void;
+		stopped: (event: Event<'stopped', T>) => boolean|void;
 
 		/**
 		* Dispatched as the activity progresses
@@ -109,15 +115,15 @@ namespace Queueable {
 		*      @param {Number} [event.processed]
 		*      @param {Number} [event.total]
 		*/
-		progress: (event: moxie.core.EventTarget.Event.Progress<"progress">) => boolean|void;
+		progress: (event: Event.Progress<'progress', T>) => boolean|void;
 
-		failed: (event: { type: 'failed'; target: T }, result: any) => boolean|void;
+		failed: (event: Event<'failed', T>, result: any) => boolean|void;
 
-		done: (event: { type: 'done'; target: T }, result: any) => boolean|void;
+		done: (event: Event<'done', T>, result: any) => boolean|void;
 
-		processed: (event: { type: 'processed'; target: T }) => boolean|void;
+		processed: (event: Event<'processed', T>) => boolean|void;
 
-		destroy: (event: { type: 'destroy'; target: T }) => boolean|void;
+		destroy: (event: Event<'destroy', T>) => boolean|void;
 	}
 	namespace Dispatches {
 		type Top<Options> = Dispatches<Queueable<Options,Dispatches<Queueable<Options,any>>>>;

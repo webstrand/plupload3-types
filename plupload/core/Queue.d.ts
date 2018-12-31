@@ -94,6 +94,12 @@ namespace Queue {
 		auto_start?: boolean,
 		finish_active?: boolean
 	};
+
+	type Event<K extends string=string,T=Queue<any>> = Queueable.Event<K,T>;
+	namespace Event {
+		type Progress<K extends string=string,T=Queue<any>> = Queueable.Event.Progress<K,T>
+	}
+
 	type Dispatches<T> = Queueable.Dispatches<T> & {
 
 		/**
@@ -102,7 +108,7 @@ namespace Queue {
 		@event started
 		@param {Object} event
 		*/
-		started: (event: { type: "started"; target: T }) => boolean|void;
+		started: (event: Event<'started', T>) => boolean|void;
 
 		/**
 		Dispatched as activity progresses
@@ -113,7 +119,7 @@ namespace Queue {
 		@param {Number} total
 		@param {plupload.core.Stats} stats
 		*/
-		progress: (event: { type: "progress"; target: T }, processed: number, total: number, stats: Stats) => boolean|void;
+		progress: (event: Event<'progress', T>, processed: number, total: number, stats: Stats) => boolean|void;
 
 		/**
 		Dispatched when activity is paused
@@ -121,7 +127,7 @@ namespace Queue {
 		@event paused
 		@param {Object} event
 		*/
-		paused: (event: { type: "paused"; target: T }) => boolean|void;
+		paused: (event: Event<'paused', T>) => boolean|void;
 
 		/**
 		Dispatched when there's no more items in processing
@@ -129,7 +135,7 @@ namespace Queue {
 		@event done
 		@param {Object} event
 		*/
-		done: (event: { type: "done"; target: T }) => boolean|void;
+		done: (event: Event<'done', T>) => boolean|void;
 
 		/**
 		Dispatched as soon as activity ends
@@ -137,7 +143,7 @@ namespace Queue {
 		@event stopped
 		@param {Object} event
 		*/
-		stopped: (event: { type: "stopped"; target: T }) => boolean|void;
+		stopped: (event: Event<'stopped', T>) => boolean|void;
 
 		/**
 		Dispatched when queue is destroyed
@@ -145,7 +151,7 @@ namespace Queue {
 		@event destroy
 		@param {Object} event
 		*/
-		destroy: (event: { type: "destroy"; target: T }) => boolean|void;
+		destroy: (event: Event<'destroy', T>) => boolean|void;
 	};
 	namespace Dispatches {
 		type Top<Options> = Dispatches<Queue<Options, Dispatches<Queue<Options,any>>>>;

@@ -16,7 +16,7 @@ interface UploaderConstructor {
 	new(options: Uploader.Options): Uploader;
 }
 
-interface Uploader extends Uploader.Patch<core.Queue<Uploader.Options>> {
+interface Uploader extends Uploader.Patch<core.Queue<Uploader.Options, Uploader.Dispatches.Top>> {
 	/**
 	 * Unique id for the Uploader instance.
 	 *
@@ -174,30 +174,18 @@ interface Uploader extends Uploader.Patch<core.Queue<Uploader.Options>> {
 const Uploader: UploaderConstructor;
 namespace Uploader {
 	/**
-	 * For some reason, the developers of plupload decided that Uploader needed
-	 * a new interface for managing events that's incompatible with the parent
-	 * moxie.core.EventTarget interface. (The real class still inherits from
-	 * EventTarget, though!)
+	 * plupload.Uploader has a different signature for dispatchEvent/trigger and
+	 * bind (but not addEventListener).
 	 */
-	type EventTarget = {
+	type EventTarget<Dispatches=Uploader.Dispatches.Top> = {
 		/**
 		Dispatches the specified event name and its arguments to all listeners.
-		@method trigger
+		@method dispatchEvent
 		@param {String} name Event name to fire.
 		@param {Object..} Multiple arguments to pass along to the listener functions.
 		*/
-		// moxie.core.EventTarget provides both dispatchEvent and trigger
-		// as aliases to send messages to listeners. plupload.Uploader
-		// events have a different arguments structure, so we don't pass
-		// them onto the EventTarget.
-		dispatchEvent<K extends string|number>(type: K, ...args: Array<K extends keyof Dispatches ? Parameters<Dispatches[K]> : any[]>): boolean;
-
-		/**
-		Check whether uploader has any listeners to the specified event.
-		@method hasEventListener
-		@param {String} name Event name to check for.
-		*/
-		hasEventListener<K extends string|number>(type: K): moxie.core.EventTarget.ListenerHandle<K extends keyof Dispatches ? Dispatches[K] : never, unknown>|false;
+		dispatchEvent<K extends string|number>(type: K, ...args: moxie.core.EventTarget.LookupArgs<Dispatches, K>): boolean;
+		trigger: EventTarget<Dispatches>['dispatchEvent'];
 
 		/**
 		Adds an event listener by name.
@@ -207,25 +195,15 @@ namespace Uploader {
 		@param {Object} [scope] Optional scope to execute the specified function in.
 		@param {Number} [priority=0] Priority of the event handler - handlers with higher priorities will be called first
 		*/
-		bind<K extends string|number, T>(type: K, fn: moxie.core.EventTarget.Listener<K extends keyof Dispatches ? Dispatches[K] : never, T>, scope: T, priority?: number): void;
-		bind<K extends string|number, T>(this: T, type: K, fn: moxie.core.EventTarget.Listener<K extends keyof Dispatches ? Dispatches[K] : never, T>): void;
-
-
-		/**
-		Removes the specified event listener.
-		@method unbind
-		@param {String} name Name of event to remove.
-		@param {function} fn Function to remove from listener.
-		*/
-		unbind<K extends string|number>(type: K, fn?: moxie.core.EventTarget.Listener<K extends keyof Dispatches ? Dispatches[K] : never, any>): void
+		bind<K extends string|number, T, U>(this: U, type: K, fn: moxie.core.EventTarget.Lookup<Dispatches, K, T extends (false|0|""|null|undefined) ? U : T>, scope: T, priority?: number): void;
 	}
 
 	type ModifiableOptions = core.Queue.Options & {
 		/** undocumented */
-		init?: Partial<Dispatches>;
+		init?: Partial<Dispatches.Top>;
 
 		/** undocumented */
-		preinit?: Partial<Dispatches>;
+		preinit?: Partial<Dispatches.Top>;
 
 		/**
 		Chunk size in bytes to slice the file into. Shorcuts with b, kb, mb, gb,
@@ -371,7 +349,12 @@ namespace Uploader {
 		silverlight_xap_url?: string;
 	}
 
-	type Dispatches = {
+	/** Uploader has a different callback format */
+	type RewriteDispatches<Base, T> = {
+		[F in keyof Base]: Base[F] extends (this: infer P, _: any, ...args: infer Q) => infer R ? (this: P, uploader: T, ...args: Q) => R : Base[F];
+	}
+
+	type Dispatches<T> = RewriteDispatches<core.Queue.Dispatches<T>, T> & {
 		/**
 		Fires when the current RunTime has been initialized.
 		@event Init
@@ -535,6 +518,10 @@ namespace Uploader {
 		*/
 		destroy: (uploader: Uploader) => boolean|void;
 	};
+
+	namespace Dispatches {
+		type Top = Dispatches<Uploader>;
+	}
 
 	type Patch<Base> = { [P in keyof Base]: P extends keyof Uploader.EventTarget ? Uploader.EventTarget[P] : Base[P] };
 
