@@ -31,7 +31,10 @@ interface Basic {
 	@param {Object} [obj]* Multiple objects to extend with.
 	@return {Object} Same as target, the extended object.
 	*/
-	extend(target: object, ...obj: object[]): object;
+	extend<T, A>(target: T, a: A): T & A;
+	extend<T, A, B>(target: T, a: A, b: B): T & A & B;
+	extend<T, A, B, C>(target: T, a: A, b: B, c: C): T & A & B & C;
+	extend(target: any, ...args: any[]): unknown;
 
 	/**
 	Extends the specified object with another object(s), but only if the property exists in the target.

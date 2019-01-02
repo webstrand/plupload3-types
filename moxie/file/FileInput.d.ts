@@ -39,7 +39,7 @@ interface FileInputConstructor {
 		</script>
 	*/
 	new(options: FileInput.Options): FileInput;
-	new(browse_button: FileInput.Opt<'browse_button'>): FileInput;
+	new(browse_button: FileInput.Options['browse_button']): FileInput;
 }
 
 interface FileInput extends runtime.RuntimeClient, core.EventTarget<FileInput.Dispatches> {
@@ -123,14 +123,13 @@ interface FileInput extends runtime.RuntimeClient, core.EventTarget<FileInput.Di
 }
 const FileInput: FileInputConstructor;
 namespace FileInput {
-	type Opt<T> = T extends keyof Options ? Options[T] : never;
 	type Options = {
-		browse_button: string|Element;
-		accept: core.utils.Mime.MimeType[];
-		multiple: boolean;
-		directory: boolean;
-		container: string|Element;
-		required_caps: false|runtime.Runtime.Caps;
+		browse_button?: string|Element;
+		accept?: core.utils.Mime.MimeType[];
+		multiple?: boolean;
+		directory?: boolean;
+		container?: string|Element;
+		required_caps?: false|runtime.Runtime.Caps;
 	}
 	type Dispatches = {
 		/**

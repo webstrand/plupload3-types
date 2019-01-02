@@ -126,7 +126,7 @@ interface Uploader extends Uploader.Patch<core.Queue<Uploader.Options, Uploader.
 	 * @method disableBrowse
 	 * @param {Boolean} disable Whether to disable or enable (default: true)
 	*/
-	disableBrowse(disable: boolean): void;
+	disableBrowse(disable?: boolean): void;
 
 	/**
 	 * Returns the specified FileUploader object by id
@@ -169,6 +169,8 @@ interface Uploader extends Uploader.Patch<core.Queue<Uploader.Options, Uploader.
 	 * @param {Number} [length] Length of items to remove
 	*/
 	splice(start?: number, length?: number): core.Queueable[];
+
+	destroy(): void;
 }
 
 const Uploader: UploaderConstructor;
@@ -317,7 +319,7 @@ namespace Uploader {
 		id of the DOM element or DOM element itself to use as file dialog
 		trigger.
 		*/
-		browse_button: string|HTMLElement;
+		browse_button: moxie.file.FileInput.Options['browse_button']|moxie.file.FileInput.Options['browse_button'][]
 
 		/**
 		id of the DOM element or DOM element itself to use as a drop zone for
