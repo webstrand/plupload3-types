@@ -1,5 +1,5 @@
 declare namespace moxie { namespace core {
-class EventTarget<Dispatches extends EventTarget.Dispatchable=EventTarget.Dispatchable> {
+class EventTarget<Dispatches extends EventTarget.Dispatchable> {
 	/**
 	Unique id of the event dispatcher, usually overriden by children
 	@property uid
@@ -110,10 +110,9 @@ class EventTarget<Dispatches extends EventTarget.Dispatchable=EventTarget.Dispat
 }
 namespace EventTarget {
 	type Dispatches<T=never> = {};
-	type Callable<T=any> = (this: any, _: any, ...args: any[]) => boolean|void;
+
 	type Dispatchable = {
-		[key: string]: Callable;
-		[key: number]: Callable;
+		[key: string]: (_: any, ...args: any[]) => boolean|void;
 	};
 
 	type Lookup<Dispatches, Key, Context>

@@ -531,7 +531,7 @@ declare namespace plupload {
 	@private
 	@constructor
 	*/
-	const EventTarget: moxie.core.EventTarget;
+	const EventTarget: typeof moxie.core.EventTarget.constructor;
 
 	/**
 	Common set of methods and properties for every runtime instance
